@@ -6,11 +6,11 @@ import { MainPageGate } from '@/context/goods'
 import BestsellerGoods from '@/components/modules/MainPage/BestsellerGoods'
 import NewGoods from '@/components/modules/MainPage/NewGoods'
 import BrandLife from '@/components/modules/MainPage/BrandLife'
-//import { usePageTitle } from '@/hooks/usePageTitle'
+import { usePageTitle } from '@/hooks/usePageTitle'
 
 const MainPage = () => {
   useGate(MainPageGate)
-  //usePageTitle('main')
+  usePageTitle('main')
 
   return (
     <main>
