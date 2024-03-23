@@ -16,24 +16,32 @@ import {
 import CartPopup from './CartPopup/CartPopup'
 import HeaderProfile from './HeaderProfile'
 import { $isAuth } from '@/context/auth'
-import { loginCheckFx } from '@/api/auth'
+import { loginCheckFx } from '@/context/user'
 import { useEffect } from 'react'
 import { setLang } from '@/context/lang'
 //import { $user } from '@/context/user'
-//import { useCartByAuth } from '@/hooks/useCartByAuth'
 import {
   addProductsFromLSToCart,
   setCartFromLS,
   setShouldShowEmpty,
 } from '@/context/cart'
+import {
+  $favorites,
+  $favoritesFromLS,
+  addProductsFromLSToFavorites,
+  setFavoritesFromLS,
+  setShouldShowEmptyFavorites,
+} from '@/context/favorites'
+import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 
 const Header = () => {
   const isAuth = useUnit($isAuth)
   const loginCheckSpinner = useUnit(loginCheckFx.pending)
   const { lang, translations } = useLang()
+  const currentFavoritesByAuth = useGoodsByAuth($favorites, $favoritesFromLS)
   //const user = useUnit($user)
 
-  //const currentCartByAuth = useCartByAuth()
+  //const currentCartByAuth = useGoodsByAuth($cart, $cartFromLs)
 
   const handleOpenMenu = () => {
     addOverflowHiddenToBody()
@@ -49,6 +57,9 @@ const Header = () => {
     const auth = JSON.parse(localStorage.getItem('auth') as string)
     const lang = JSON.parse(localStorage.getItem('lang') as string)
     const cart = JSON.parse(localStorage.getItem('cart') as string)
+    const favoritesFromLS = JSON.parse(
+      localStorage.getItem('favorites') as string
+    )
 
     if (lang) {
       if (lang === 'ru' || lang === 'en') {
@@ -58,15 +69,32 @@ const Header = () => {
 
     triggerLoginCheck()
 
+    if (!favoritesFromLS || !favoritesFromLS?.length) {
+      setShouldShowEmptyFavorites(true)
+    }
+
+    if (!cart || !cart?.length) {
+      setShouldShowEmpty(true)
+    }
+
     if (auth?.accessToken) {
       return
     }
+
     if (cart && Array.isArray(cart)) {
       if (!cart.length) {
         setShouldShowEmpty(true)
-        return
+      } else {
+        setCartFromLS(cart)
       }
-      setCartFromLS(cart)
+    }
+
+    if (favoritesFromLS && Array.isArray(favoritesFromLS)) {
+      if (!favoritesFromLS.length) {
+        setShouldShowEmptyFavorites(true)
+      } else {
+        setFavoritesFromLS(favoritesFromLS)
+      }
     }
   }, [])
 
@@ -74,11 +102,20 @@ const Header = () => {
     if (isAuth) {
       const auth = JSON.parse(localStorage.getItem('auth') as string)
       const cartFromLS = JSON.parse(localStorage.getItem('cart') as string)
+      const favoritesFromLS = JSON.parse(
+        localStorage.getItem('favorites') as string
+      )
 
       if (cartFromLS && Array.isArray(cartFromLS)) {
         addProductsFromLSToCart({
           jwt: auth.accessToken,
           cartItems: cartFromLS,
+        })
+      }
+      if (favoritesFromLS && Array.isArray(favoritesFromLS)) {
+        addProductsFromLSToFavorites({
+          jwt: auth.accessToken,
+          favoriteItems: favoritesFromLS,
         })
       }
     }
@@ -105,7 +142,11 @@ const Header = () => {
             <Link
               href='/favorites'
               className='header__links__item__btn header__links__item__btn--favorites'
-            />
+            >
+              {!!currentFavoritesByAuth.length && (
+                <span className='not-empty' />
+              )}
+            </Link>
           </li>
           <li className='header__links__item'>
             <Link
