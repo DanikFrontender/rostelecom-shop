@@ -1,12 +1,18 @@
 /* eslint-disable indent */
-import { refreshTokenFx } from '@/api/auth'
 import {
   addProductToCartFx,
   deleteCartItemFx,
   getCartItemsFx,
 } from '@/api/cart'
 import { JWTError } from '@/constants/jwt'
+import { refreshTokenFx } from '@/context/auth'
 import { addProductsFromLSToCartFx } from '@/context/cart'
+import {
+  addProductToComparisonFx,
+  addProductsFromLSToComparisonFx,
+  deleteComparisonItemFx,
+  getComparisonItemsFx,
+} from '@/context/comparison'
 import {
   addProductToFavoriteFx,
   addProductsFromLSToFavoritesFx,
@@ -19,6 +25,11 @@ import {
   IAddProductsFromLSToCartFx,
   IDeleteCartItemsFx,
 } from '@/types/cart'
+import {
+  IAddProductToComparisonFx,
+  IAddProductsFromLSToComparisonFx,
+  IDeleteComparisonItemsFx,
+} from '@/types/comparison'
 import {
   IAddProductsFromLSToFavoriteFx,
   IDeleteFavoriteItemsFx,
@@ -41,6 +52,25 @@ export const handleJWTError = async (
       switch (repeatRequestMethodName) {
         case 'getCartItemsFx':
           return getCartItemsFx({
+            jwt: newTokens.accessToken,
+          })
+        case 'addProductToComparisonFx':
+          return addProductToComparisonFx({
+            ...(payload as IAddProductToComparisonFx),
+            jwt: newTokens.accessToken,
+          })
+        case 'getComparisonItemsFx':
+          return getComparisonItemsFx({
+            jwt: newTokens.accessToken,
+          })
+        case 'addProductsFromLSToComparisonFx':
+          return addProductsFromLSToComparisonFx({
+            ...(payload as IAddProductsFromLSToComparisonFx),
+            jwt: newTokens.accessToken,
+          })
+        case 'deleteComparisonItemFx':
+          return deleteComparisonItemFx({
+            ...(payload as IDeleteComparisonItemsFx),
             jwt: newTokens.accessToken,
           })
         case 'addProductToCartFx':
