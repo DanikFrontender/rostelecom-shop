@@ -9,7 +9,7 @@ import {
   $comparison,
   $comparisonFromLs,
   $shouldShowEmptyComparison,
-} from '@/context/comparison'
+} from '@/context/comparison/state'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
 import { useComparisonLinks } from '@/hooks/useComparisonLinks'
 import Skeleton from '../elements/Skeleton/Skeleton'

@@ -4,10 +4,10 @@ import { useLang } from '@/hooks/useLang'
 import { useTotalPrice } from '@/hooks/useTotalPrice'
 import { countWholeCartItemsAmount } from '@/lib/utils/cart'
 import { formatPrice, showCountMessage } from '@/lib/utils/common'
-import { OrderInfoBlock } from '@/types/modules'
-import styles from '@/styles/order-block/index.module.scss'
+import { type OrderInfoBlock } from '@/types/modules'
 import { useGoodsByAuth } from '@/hooks/useGoodsByAuth'
-import { $cart, $cartFromLs } from '@/context/cart'
+import { $cart, $cartFromLs } from '@/context/cart/state'
+import styles from '@/styles/order-block/index.module.scss'
 
 const OrderInfoBlock = ({
   isCorrectPromotionalCode,
