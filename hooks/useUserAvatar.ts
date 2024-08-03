@@ -14,7 +14,7 @@ export const useUserAvatar = () => {
 
     const oauthAvatar = JSON.parse(
       localStorage.getItem(
-        '@@earthoOnespajs@@::l3Q4jO58IChQRwUkzkHI::default::undefined'
+        '@@earthoOnespajs@@::A5ppQpsYKg7TTUcQYPmA::default::undefined'
       ) as string
     )
 
