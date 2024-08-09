@@ -7,10 +7,9 @@ export const useUserLogout = () => {
   const { logout } = useEarthoOne()
 
   return () => {
-    logout({ client_id: `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}` })
+    logout({ clientId: `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}` })
     localStorage.removeItem('auth')
     setIsAuth(false)
     router.push('/')
-    window.location.reload()
   }
 }
